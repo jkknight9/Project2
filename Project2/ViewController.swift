@@ -19,6 +19,7 @@ class ViewController: UIViewController {
     var score = 0
     var questionCount = 0
     var correctAnswer = 0
+    var wrongAnswer = 0
     
     
     override func viewDidLoad() {
@@ -36,6 +37,7 @@ class ViewController: UIViewController {
     func askQuestion(action: UIAlertAction! = nil) {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+        wrongAnswer = Int.random(in: 0...2)
         button1.setImage(UIImage(named: countries[0]), for: .normal)
         button2.setImage(UIImage(named: countries[1]), for: .normal)
         button3.setImage(UIImage(named: countries[2]), for: .normal)
@@ -43,21 +45,29 @@ class ViewController: UIViewController {
     }
     
     @IBAction func buttonTapped(_ sender: UIButton) {
-        var title: String
-        if sender.tag == correctAnswer {
-            title = "Correct"
-            score += 1
-            scoreLabel.title = "Score: \(score)"
-        } else {
-            title = "Wrong"
-            score -= 1
-            scoreLabel.title = " Score: \(score)"
-        }
-        questionCount = questionCount + 1
+        
+        var title = String()
         if questionCount <= 10 {
-            let ac = UIAlertController(title: title , message: "That's the \(countries[correctAnswer].uppercased()) flag", preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
-            present(ac, animated: true)
+            if sender.tag == correctAnswer {
+               
+                title = "Correct"
+                let ac = UIAlertController(title: title , message: "That's the \(countries[correctAnswer].uppercased()) flag", preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
+                present(ac, animated: true)
+                score += 1
+                scoreLabel.title = "Score: \(score)"
+                
+            } else if sender.tag == wrongAnswer {
+              
+                title = "Wrong"
+                let ac = UIAlertController(title: title , message: "That's the \(countries[wrongAnswer].uppercased()) flag", preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "Continue", style: .default, handler: askQuestion))
+                present(ac, animated: true)
+                score -= 1
+                scoreLabel.title = " Score: \(score)"
+            }
+            questionCount = questionCount + 1
+            
         } else {
             let ac = UIAlertController(title: "Final Score is \(score)", message: "You finished all the questions, would you like to start over?", preferredStyle: .alert)
             ac.addAction(UIAlertAction(title: "Start Over", style: .default, handler: { (action) in
@@ -70,7 +80,7 @@ class ViewController: UIViewController {
     func startOver() {
         score = 0
         questionCount = 0
-        scoreLabel.title = "Score: 0"
+        scoreLabel.title = "Score: \(score)"
         countries.shuffle()
     }
 }
