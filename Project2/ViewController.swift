@@ -43,16 +43,16 @@ class ViewController: UIViewController {
     }
     
     @IBAction func buttonTapped(_ sender: UIButton) {
-            var title: String
-            if sender.tag == correctAnswer {
-                title = "Correct"
-                score += 1
-                scoreLabel.title = "Score: \(score)"
-            } else {
-                title = "Wrong"
-                score -= 1
-                scoreLabel.title = " Score: \(score)"
-            }
+        var title: String
+        if sender.tag == correctAnswer {
+            title = "Correct"
+            score += 1
+            scoreLabel.title = "Score: \(score)"
+        } else {
+            title = "Wrong"
+            score -= 1
+            scoreLabel.title = " Score: \(score)"
+        }
         questionCount = questionCount + 1
         if questionCount <= 10 {
             let ac = UIAlertController(title: title , message: "That's the \(countries[correctAnswer].uppercased()) flag", preferredStyle: .alert)
@@ -70,6 +70,8 @@ class ViewController: UIViewController {
     func startOver() {
         score = 0
         questionCount = 0
+        scoreLabel.title = "Score: 0"
+        countries.shuffle()
     }
 }
 
